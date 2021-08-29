@@ -1,7 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Question, Developer, Choice
-
-# Create your views here.
 
 def index(request) :
     developers = Developer.objects.all()
@@ -10,7 +8,7 @@ def index(request) :
         'developers' : developers
     }
 
-    return render(request, 'index.html', context=context)
+    return render(request, 'home/index.html', context=context)
 
 def form(request) :
     questions = Question.objects.all()
@@ -19,11 +17,9 @@ def form(request) :
         'questions' : questions
     }
 
-    return render(request, 'form.html', context=context)
+    return render(request, 'home/form.html', context=context)
 
-def result(request) :
-
-
+def submit(request) :
     N = Question.objects.count()
     K = Developer.objects.count()
 
@@ -46,7 +42,15 @@ def result(request) :
         'counter' : counter
     }
 
-    return render(request, 'result.html', context)
+    return redirect('home:result', developer_id=best_developer_id)
 
+def result(request, developer_id) :
+    developer = Developer.objects.get(pk=developer_id)
+    context = {
+        'developer' : developer,
+    }
+    return render(request, 'home/result.html', context=context)
 
+def all_results(request):
+    return render(request, 'home/all_results.html')
 

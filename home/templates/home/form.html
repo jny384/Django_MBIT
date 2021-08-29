@@ -1,18 +1,14 @@
+{% extends 'home/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+{% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <title>나의 개발 유형찾기</title>
-</head>
-<body>
+{% endblock head %}
+{% block body %}
     <section id="survey">
         <div class="wrapper">
-            <form id="form" action="/result/" method="post">
+            <form id="form" action="{% url 'home:submit' %}" method="post">
                 {% csrf_token %}
                 {% for question in questions %}
                     <div class="test">
@@ -23,10 +19,10 @@
                         <div class="answer">
                           {% for choice in question.choice_set.all %}
                             <div>
-                              <input 
-                                type="radio" 
-                                name="question-{{ question.number }}" 
-                                id="choice-{{ choice.pk }}" 
+                              <input
+                                type="radio"
+                                name="question-{{ question.number }}"
+                                id="choice-{{ choice.pk }}"
                                 value="{{ choice.developer.pk }}"
                               />
                               <label for="choice-{{ choice.pk }}">{{ forloop.counter }}. {{ choice.content }}</label>
@@ -52,6 +48,7 @@
             </form>
         </div>
     </section>
+{% endblock body %}
+{% block js %}
     <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
-</body>
-</html>
+{% endblock js %}
